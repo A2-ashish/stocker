@@ -16,6 +16,8 @@ def login_required(f):
 @app.route('/')
 def home():
     if 'user_id' in session:
+        if session.get('role') == 'admin':
+            return redirect(url_for('admin_dashboard'))
         return redirect(url_for('dashboard'))
     return render_template('login.html') # Showing login as home for simplicity
 
@@ -47,6 +49,9 @@ def login():
             session['email'] = user['email']
             session['username'] = user['username']
             session['role'] = user.get('role', 'user')
+            
+            if session['role'] == 'admin':
+                return redirect(url_for('admin_dashboard'))
             return redirect(url_for('dashboard'))
         else:
             flash('Invalid email or password', 'danger')
