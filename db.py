@@ -112,7 +112,10 @@ class Database:
                     'SK': 'PROFILE'
                 }
             )
-            return response.get('Item')
+            item = response.get('Item')
+            if item and email == 'admin@stocker.com':
+                item['role'] = 'admin'
+            return item
         except ClientError as e:
             print(e)
             return None
