@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section" style="text-align: center; padding: 4rem 1rem;">
+    <h1
+        style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        Trade Smarter with Stocker.
+    </h1>
+    <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 3rem;">
+        Experience the next generation of stock trading. Real-time data, instant execution, and a powerful dashboard to
+        manage your portfolio.
+    </p>
+
+    <div class="cta-buttons">
+        {% if session.get('user_id') %}
+        {% if session.get('role') == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary"
+            style="padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none; display: inline-block;">Go to Admin
+            Panel &rarr;</a>
+        {% else %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary"
+            style="padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none; display: inline-block;">Go to Dashboard
+            &rarr;</a>
+        {% endif %}
+        {% else %}
+        <a href="{{ url_for('signup') }}" class="btn btn-primary"
+            style="padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none; display: inline-block; margin-right: 1rem;">Get
+            Started</a>
+        <a href="{{ url_for('login') }}" class="btn"
+            style="padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none; display: inline-block; background: rgba(255,255,255,0.1); color: var(--text-primary);">Log
+            In</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="features-grid"
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 4rem; padding: 2rem 0;">
+    <div class="card glass" style="padding: 2rem;">
+        <div style="font-size: 2rem; margin-bottom: 1rem;">🚀</div>
+        <h3 style="margin-bottom: 1rem;">Real-Time Trading</h3>
+        <p style="color: var(--text-secondary);">Execute buy and sell orders instantly with our high-speed mock engine.
+        </p>
+    </div>
+
+    <div class="card glass" style="padding: 2rem;">
+        <div style="font-size: 2rem; margin-bottom: 1rem;">🔒</div>
+        <h3 style="margin-bottom: 1rem;">Secure Portfolio</h3>
+        <p style="color: var(--text-secondary);">Your assets are safe. Track your performance with our secure portfolio
+            manager.</p>
+    </div>
+
+    <div class="card glass" style="padding: 2rem;">
+        <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+        <h3 style="margin-bottom: 1rem;">Live Analytics</h3>
+        <p style="color: var(--text-secondary);">Gain insights with real-time portfolio valuation and dynamic stock
+            pricing.</p>
+    </div>
+</div>
+{% endblock %}
