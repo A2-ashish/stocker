@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container glass">
+    <h2 style="text-align: center; margin-bottom: 2rem;">
+        {% if mode == 'signup' %} Create Account {% else %} Welcome Back {% endif %}
+    </h2>
+
+    <form method="POST" action="{{ url_for('signup' if mode == 'signup' else 'login') }}">
+        {% if mode == 'signup' %}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            {% if mode == 'signup' %} Sign Up {% else %} Login {% endif %}
+        </button>
+    </form>
+
+    <div style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem;">
+        {% if mode == 'signup' %}
+        Already have an account? <a href="{{ url_for('login') }}" style="color: var(--accent-color);">Login</a>
+        {% else %}
+        Don't have an account? <a href="{{ url_for('signup') }}" style="color: var(--accent-color);">Sign Up</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

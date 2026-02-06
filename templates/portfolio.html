@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card glass">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2>Your Holdings</h2>
+        <a href="{{ url_for('trade') }}" class="btn btn-primary" style="width: auto; padding: 0.5rem 1.5rem;">Buy New
+            Stock</a>
+    </div>
+
+    {% if portfolio %}
+    <table>
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Quantity</th>
+                <th>Current Value (Est)</th>
+                <th>Last Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in portfolio %}
+            <tr>
+                <td style="font-weight: 700;">{{ item.symbol }}</td>
+                <td>{{ item.quantity }}</td>
+                <!-- Mock calc -->
+                <td>${{ "{:,.2f}".format(item.quantity|int * 150.00) }}</td>
+                <td>{{ item.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">You don't own any stocks yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

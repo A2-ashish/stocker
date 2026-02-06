@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-header" style="margin-bottom: 2rem;">
+    <h1>Hello, {{ user.username }}</h1>
+    <p style="color: var(--text-secondary);">Here's how your portfolio is performing today.</p>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card glass">
+        <h3>Total Portfolio Value</h3>
+        <div class="balance">${{ "{:,.2f}".format(total_value) }}</div>
+    </div>
+
+    <div class="card glass">
+        <h3>Quick Actions</h3>
+        <div class="mt-4">
+            <a href="{{ url_for('trade') }}" class="btn btn-primary"
+                style="display: inline-block; text-align: center; text-decoration: none;">New Trade</a>
+        </div>
+    </div>
+
+    <div class="card glass">
+        <h3>Market Status</h3>
+        <div style="font-size: 1.2rem; font-weight: 600; color: var(--success-color);">
+            ● Open
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+            Real-time data active
+        </p>
+    </div>
+</div>
+
+<div class="card glass">
+    <h3>Recent Transactions</h3>
+    {% if transactions %}
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Symbol</th>
+                <th>Action</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tx in transactions %}
+            <tr>
+                <!-- Assuming timestamp is handled or formatted in backend or here via filter. 
+                     For simplicity using raw or simple formatting if needed. -->
+                <td>{{ tx.timestamp }}</td>
+                <td>{{ tx.stock_symbol }}</td>
+                <td class="{{ 'text-success' if tx.action == 'BUY' else 'text-danger' }}">{{ tx.action }}</td>
+                <td>{{ tx.quantity }}</td>
+                <td>${{ tx.price }}</td>
+                <td>${{ tx.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No recent transactions.</p>
+    {% endif %}
+</div>
+{% endblock %}
