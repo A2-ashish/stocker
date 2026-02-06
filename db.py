@@ -75,7 +75,7 @@ class Database:
         
         # Auto-admin logic for mock mode (Secure: only specific email)
         role = 'user'
-        if self.is_mock and email == 'admin@stocker.com':
+        if email == 'admin@stocker.com':
             role = 'admin'
             print(f"Assigning ADMIN role to: {email}")
 
