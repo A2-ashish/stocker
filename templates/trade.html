@@ -8,11 +8,11 @@
         <form method="POST">
             <div class="mb-3">
                 <label for="symbol" class="form-label">Stock Symbol</label>
-                <select class="form-select" id="symbol" name="symbol" required>
-                    <option value="" disabled selected>Select a stock...</option>
+                <select class="form-select" id="symbol" name="symbol" required onchange="updatePrice()">
+                    <option value="" disabled selected data-price="0">Select a stock...</option>
                     {% for stock in stocks %}
-                    <option value="{{ stock.symbol }}">{{ stock.symbol }} - {{ stock.name }} (${{ stock.current_price
-                        }})</option>
+                    <option value="{{ stock.symbol }}" data-price="{{ stock.current_price }}">{{ stock.symbol }} - {{
+                        stock.name }} (${{ stock.current_price }})</option>
                     {% endfor %}
                 </select>
             </div>
@@ -27,15 +27,36 @@
 
             <div class="form-group">
                 <label for="quantity">Quantity</label>
-                <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+                <input type="number" id="quantity" name="quantity" min="1" value="1" required oninput="updatePrice()">
             </div>
 
             <div class="alert alert-success" style="margin-top: 1rem; display: none;" id="price-preview">
-                Est. Price: $<span id="est-price">150.00</span>
+                Est. Total: $<span id="est-price">0.00</span>
             </div>
 
             <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Submit Order</button>
         </form>
     </div>
 </div>
+
+<script>
+    function updatePrice() {
+        const symbolSelect = document.getElementById('symbol');
+        const quantityInput = document.getElementById('quantity');
+        const pricePreview = document.getElementById('price-preview');
+        const estPriceSpan = document.getElementById('est-price');
+
+        const selectedOption = symbolSelect.options[symbolSelect.selectedIndex];
+        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+        const quantity = parseInt(quantityInput.value) || 0;
+
+        if (price > 0 && quantity > 0) {
+            const total = price * quantity;
+            estPriceSpan.innerText = total.toFixed(2);
+            pricePreview.style.display = 'block';
+        } else {
+            pricePreview.style.display = 'none';
+        }
+    }
+</script>
 {% endblock %}
