@@ -64,6 +64,7 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Listed At</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +74,13 @@
                             <td>{{ stock.name }}</td>
                             <td>${{ stock.current_price }}</td>
                             <td>{{ stock.created_at }}</td>
+                            <td>
+                                <form action="{{ url_for('admin_delete_stock', symbol=stock.symbol) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete {{ stock.symbol }}?');">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                        style="background-color: var(--danger-color); padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -65,13 +65,17 @@ def dashboard():
     transactions = db.get_transactions(session['email'])
     # Calculate total value (mock prices for now since we don't have a real API yet)
     total_value = 0
+    # Calculate total value using current stock prices
+    total_value = 0.0
     for item in portfolio:
-        # In a real app, fetch current price here.
-        # We will just assume price hasn't changed for the total calculation or use a mock.
         qty = int(item['quantity'])
-        # Mock current price logic or use the price stored if we want to track cost basis
-        # content placeholder
-        total_value += qty * 150.00 # Mock price $150 to match trade execution
+        symbol = item['symbol']
+        # Fetch current price from DB
+        current_price = db.get_stock_price(symbol)
+        if current_price == 0:
+             # Fallback if stock deleted or not found, maybe keep it at 0 or use last known if we stored it
+             pass
+        total_value += qty * current_price
         
     return render_template('dashboard.html', portfolio=portfolio, transactions=transactions, total_value=total_value, user=session)
 
@@ -93,11 +97,10 @@ def trade():
              return redirect(url_for('trade'))
 
         # Find the stock to get its price
-        current_price = 150.00 # Fallback
-        for s in stocks:
-            if s['symbol'] == symbol:
-                current_price = float(s['current_price'])
-                break
+        current_price = db.get_stock_price(symbol)
+        if current_price == 0:
+             flash('Error: Stock price not found.', 'danger')
+             return redirect(url_for('trade'))
 
         success, msg = db.create_transaction(
             session['email'],
@@ -157,3 +160,13 @@ def admin_dashboard():
     stats = db.get_system_stats()
     stocks = db.get_all_stocks()
     return render_template('admin.html', users=users, stats=stats, stocks=stocks)
+
+@app.route('/admin/delete_stock/<symbol>', methods=['POST'])
+@admin_required
+def admin_delete_stock(symbol):
+    success, msg = db.delete_stock(symbol)
+    if success:
+        flash(f'Stock {symbol} deleted successfully.', 'success')
+    else:
+        flash(f'Error deleting stock: {msg}', 'danger')
+    return redirect(url_for('admin_dashboard'))

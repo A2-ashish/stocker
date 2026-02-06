@@ -284,3 +284,35 @@ class Database:
         except ClientError as e:
             print(e)
             return []
+
+    def get_stock_price(self, symbol):
+        try:
+            # Mock or Real DB fetch
+            if self.is_mock:
+                for item in self.table.items:
+                    if item.get('PK') == f"STOCK#{symbol}" and item.get('SK') == 'META':
+                        return float(item['current_price'])
+                return 150.00 # Default mock fallback if not found
+            
+            response = self.table.get_item(Key={'PK': f"STOCK#{symbol}", 'SK': 'META'})
+            if 'Item' in response:
+                return float(response['Item']['current_price'])
+            return 0.0 # Not found
+        except Exception as e:
+            print(f"Error fetching price for {symbol}: {e}")
+            return 0.0
+
+    def delete_stock(self, symbol):
+        try:
+            # PK: STOCK#<symbol>, SK: META
+            key = {'PK': f"STOCK#{symbol}", 'SK': 'META'}
+            
+            if self.is_mock:
+                self.table.delete_item(Key=key)
+                return True, "Stock deleted"
+
+            self.table.delete_item(Key=key)
+            return True, "Stock deleted"
+        except ClientError as e:
+            print(f"Error deleting stock: {e}")
+            return False, str(e)
