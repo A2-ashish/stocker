@@ -1,5 +1,8 @@
 # Stocker 📈
 
+[![Live Demo](https://img.shields.io/badge/demo-online-green.svg)](http://13.221.197.146:5000/)
+**Live Demo:** [http://13.221.197.146:5000/](http://13.221.197.146:5000/)
+
 **Stocker** is a modern, cloud-native stock trading platform designed to simulate real-world trading environments. Built with **Flask** and **AWS**, it features a secure user authentication system, real-time portfolio management, and a robust admin panel for simulated stock listing and market control.
 
 ## 🚀 Features
