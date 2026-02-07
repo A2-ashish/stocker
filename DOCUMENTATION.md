@@ -11,20 +11,20 @@ graph TD
     
     subgraph "AWS Cloud (Region: us-east-1)"
         direction TB
-        LB[Public Internet / IP]
+        LB["Public Internet / IP"]
         
         subgraph "Compute"
-            EC2[EC2 Instance (t2.micro)]
-            Flask[Flask Application]
-            Boto3[Boto3 SDK]
+            EC2["EC2 Instance (t2.micro)"]
+            Flask["Flask Application"]
+            Boto3["Boto3 SDK"]
             
             EC2 --> Flask
             Flask --> Boto3
         end
         
         subgraph "Data & Messaging"
-            DDB[(DynamoDB Table: StockerData)]
-            SNS[SNS Topic (Notifications)]
+            DDB[("DynamoDB Table: StockerData")]
+            SNS["SNS Topic (Notifications)"]
         end
     end
     
